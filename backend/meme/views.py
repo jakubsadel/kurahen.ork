@@ -1,7 +1,8 @@
 from rest_framework import generics
 from meme.models import Post
 from .serializers import PostSerializer
-from rest_framework.permissions import IsAdminUser, DjangoModelPermissions, BasePermission, SAFE_METHODS
+from rest_framework.permissions import IsAdminUser, DjangoModelPermissions, BasePermission, SAFE_METHODS, \
+    IsAuthenticatedOrReadOnly
 
 
 class PostUserWritePermission(BasePermission):
@@ -15,7 +16,7 @@ class PostUserWritePermission(BasePermission):
 
 
 class PostList(generics.ListCreateAPIView):
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
