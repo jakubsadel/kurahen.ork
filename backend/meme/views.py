@@ -8,8 +8,8 @@ from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 
 
-class PostUserWritePermission(BasePermission):
-    message = 'Editing posts is restricted to the author only.'
+class PostUserEditPermission(BasePermission):
+    message = 'Only author can edit his posts.'
 
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
@@ -24,8 +24,8 @@ class PostList(generics.ListAPIView):
     queryset = Post.objects.all()
 
 
-class PostDetail(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission):
-    permission_classes = [PostUserWritePermission]
+class PostDetail(generics.RetrieveUpdateDestroyAPIView, PostUserEditPermission):
+    permission_classes = [PostUserEditPermission]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
@@ -44,13 +44,9 @@ class CreatePost(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class EditPost(generics.UpdateAPIView):
+class AdminPostDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = PostSerializer
     queryset = Post.objects.all()
 
 
-class DeletePost(generics.RetrieveDestroyAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = PostSerializer
-    queryset = Post.objects.all()
