@@ -4,5 +4,7 @@ from meme.models import Post
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ('id', 'title', 'author', 'excerpt', 'content', 'status')
         model = Post
+        fields = ('id', 'title', 'category', 'image', 'author',
+                  'excerpt', 'content', 'status')
+
